@@ -14,9 +14,8 @@ public class BankDAO implements BankinfoDAO{
 	}
 	public boolean validBankaccount(String accountNo)
 	{
-		if(bankinfo.containsKey(accountNo))
-			return true;
-		return false;
+		boolean flag=true;
+		return bankinfo.containsKey(accountNo)?flag:!flag;
 	}
 	public void updateBankamout(String accountNo,double amount)
 	{

@@ -29,11 +29,11 @@ public class CollectionClass {
 	}
 	private static Map<Integer,WalletAccount> walletinfo=new HashMap<Integer,WalletAccount>();
 	static {
-		walletinfo.put(1001,new WalletAccount(1001,0.0));
-		walletinfo.put(1002,new WalletAccount(1002,300.0));
-		walletinfo.put(1003,new WalletAccount(1003,4000.0));
-		walletinfo.put(1004,new WalletAccount(1004,2220.0));
-		walletinfo.put(1005,new WalletAccount(1005,11110.0));
+		walletinfo.put(1001,new WalletAccount(1001,0.00));
+		walletinfo.put(1002,new WalletAccount(1002,300.00));
+		walletinfo.put(1003,new WalletAccount(1003,4000.00));
+		walletinfo.put(1004,new WalletAccount(1004,2220.00));
+		walletinfo.put(1005,new WalletAccount(1005,11110.00));
 	}
 	public Map<String,BankAccount> bankdetails()
 	{

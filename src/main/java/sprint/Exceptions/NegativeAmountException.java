@@ -1,8 +1,8 @@
-package sprint.Exceptions;
+package sprint.exceptions;
 
 public class NegativeAmountException extends Exception{
 	public  NegativeAmountException()
 	{
-		System.out.println("Amount should not be less than zero.");
+		System.err.println("Amount should not be less than zero.");
 	}
 }

@@ -1,4 +1,4 @@
-package sprint.Exceptions;
+package sprint.exceptions;
 
 public class DebitcardNotFoundException extends Exception{
 	public DebitcardNotFoundException()

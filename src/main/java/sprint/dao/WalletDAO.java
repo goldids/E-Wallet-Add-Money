@@ -19,9 +19,9 @@ public class WalletDAO implements WalletinfoDAO{
 	}
 	public boolean validwalletId(int walletId)
 	{
-		if(walletinfo.containsKey(walletId))
-			return true;
-		return false;
+		boolean flag=true;
+	return 	walletinfo.containsKey(walletId)?flag:!flag;
+			
 	}
 
 }

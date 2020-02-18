@@ -8,8 +8,7 @@ public class BankinfoService implements BankService{
 	}
 	public boolean validBankaccount(String accountNo)
 	{
-		return bankdao.validBankaccount(accountNo);
-				
+		return bankdao.validBankaccount(accountNo);		
 	}
 	public void updateBankamout(String accountNo,double amount)
 	{

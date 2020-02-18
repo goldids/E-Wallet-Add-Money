@@ -1,11 +1,11 @@
-package sprint.Exceptions;
+package sprint.exceptions;
 
 public class LowBalanceException extends Exception{
 public LowBalanceException(double bankamount)
 {
 
 	if(bankamount<1000)
-	System.out.println("Low Balance!");
+		System.out.println("Low Balance!");
 	else
 	{
 		System.out.println("Insufficient balance.");

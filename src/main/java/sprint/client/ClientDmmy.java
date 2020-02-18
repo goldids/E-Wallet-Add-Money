@@ -2,22 +2,23 @@ package sprint.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.InputMismatchException;
+
 import java.util.Scanner;
 
+import sprint.exceptions.CvvNotMatchException;
+import sprint.exceptions.DebitcardNotFoundException;
+import sprint.exceptions.InvalidAccountException;
+import sprint.exceptions.LowBalanceException;
+import sprint.exceptions.NegativeAmountException;
 import sprint.service.BankinfoService;
 import sprint.service.DebitcardinfoService;
-import sprint.Exceptions.DebitcardNotFoundException;
-import sprint.Exceptions.InvalidAccountException;
-import sprint.Exceptions.LowBalanceException;
-import sprint.Exceptions.NegativeAmountException;
 import sprint.service.Validations;
 import sprint.service.WalletinfoService;
 
 public class ClientDmmy {
 
 	public static void main(String[] args)throws Exception {
-		// TODO Auto-generated method stub
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		WalletinfoService walletService=new WalletinfoService();
 		BankinfoService bankService=new BankinfoService();
@@ -29,7 +30,7 @@ public class ClientDmmy {
 			System.out.println("Enter your walletId: ");
 			try {
 				
-			int WalletId;
+			int walletId;
 			while(true)
 			{
 				try
@@ -40,23 +41,23 @@ public class ClientDmmy {
 					
 					if(b1&&b2)
 					{
-						WalletId=Integer.parseInt(walletid);
+						walletId=Integer.parseInt(walletid);
 						break;
 					}
 					else
 					{
-						if(b1==false)
+						if(!b1)
 						System.out.println("Wallet Id should contains only number.");
-						else if(b2==false)
+						else if(!b2)
 							System.out.println("Invalid walletId");
 					}
 				}
 				catch(IOException e) {
 					System.out.println("Wallet Id should not be empty.Enter the walletid.");
-					e.printStackTrace();
+					
 				}
 			}
-			boolean b3=walletService.verifywalletId(WalletId);
+			boolean b3=walletService.verifywalletId(walletId);
 			if(!b3)
 			{
 				System.out.println("WalletId Does not exists.");
@@ -124,7 +125,7 @@ public class ClientDmmy {
 						if(validaccountNo && accountNolength)
 						{
 							boolean verifyaccount=bankService.validBankaccount(bankaccountNo);
-								if(verifyaccount==false)
+								if(!verifyaccount)
 									throw new InvalidAccountException(validaccountNo,accountNolength);
 		
 								double bankamount=bankService.checkBankamount(bankaccountNo);
@@ -135,9 +136,9 @@ public class ClientDmmy {
 											throw new LowBalanceException(bankamount);
 										
 										bankService.updateBankamout(bankaccountNo, amount);
-										walletService.updatewalletamount(WalletId, amount);
+										walletService.updatewalletamount(walletId, amount);
 										System.out.println("Sucessfully Added Rs."+amount+" to your wallet.");
-										System.out.println("Updated wallet amount: "+walletService.getwalletamount(WalletId));
+										System.out.println("Updated wallet amount: "+walletService.getwalletamount(walletId));
 										System.out.println("Available Balance in your Bank Account: "+bankService.checkBankamount(bankaccountNo));
 										System.out.println("Do you want to continue (y/n)");
 										String con;
@@ -172,26 +173,20 @@ public class ClientDmmy {
 								System.out.println("Enter your cvv Number");
 								cvv=br.readLine();
 								boolean cardandcvv=debitcardService.cardandcvv(debitcardNo, cvv);
-							try
-							{
-								if(cardandcvv==false)
-									throw new Exception();
+								if(!cardandcvv)
+									throw new CvvNotMatchException();
 								break;
-							}
-							catch(Exception e)
-							{
-								System.out.println("Wrong CVV! provide correct CVV!");
-							}
+								
 							}
 							boolean validcardNo=Validations.validateId(debitcardNo);
 							boolean cardNolength=Validations.debitcardlength(debitcardNo);
-								if(validcardNo==false)
+								if(!validcardNo)
 									System.out.println("Card number should contains only integer.");
 							
 							if(validcardNo && cardNolength)
 							{
 								boolean verifycard=debitcardService.validcard(debitcardNo);
-									if(verifycard==false)
+									if(!verifycard)
 										throw new DebitcardNotFoundException();
 
 									String cardbankaccountNo=debitcardService.getBankAccountNo(debitcardNo);
@@ -201,9 +196,9 @@ public class ClientDmmy {
 										else if(amount>bankamount)
 											throw new LowBalanceException(bankamount);
 										bankService.updateBankamout(cardbankaccountNo, amount);
-										walletService.updatewalletamount(WalletId, amount);
+										walletService.updatewalletamount(walletId, amount);
 										System.out.println("Sucessfully Added Rs."+amount+" to your wallet.");
-										System.out.println("Updated wallet amount: "+walletService.getwalletamount(WalletId));
+										System.out.println("Updated wallet amount: "+walletService.getwalletamount(walletId));
 										System.out.println("updated bank amount: "+bankService.checkBankamount(cardbankaccountNo));
 										System.out.println("Do you want to continue (y/n)");
 										String con;

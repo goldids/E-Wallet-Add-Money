@@ -11,50 +11,35 @@ import sprint.service.Validations;
 
 public class Validatedata {
 	Scanner s=new Scanner(System.in);
-	@AfterEach
-	public void aftereach()
-	{
-		System.out.println("Your test case passed.");
-	}
+	
 	@Test
-	public void validatedata()
+	public void validateId()
 	{
-		boolean flag=true;
-		while(flag)
-		{
-			System.out.println("TESTING");
-			System.out.println("press 1 for validating the walletId or Bank account number");
-			System.out.println("press 2 for validating the length of wallet id");
-			System.out.println("press 3 for validating the length of Bank Account numbers");
-			System.out.println("Press 4 for exit");
-			System.out.println("Enter the choice: ");
-			String choice=s.next();
-			
-			switch(choice)
-			{
-				case "1":
+		
 					String str;
-					System.out.println("Enter the string: ");
+					System.out.println("Enter the walletId/Account Number: ");
 					str=s.next();
 					boolean w=Validations.validateId(str);
 					assertEquals(true, w,"Id should cointains only number");
 					System.out.println("Your testcase for "+str+" passed.");
-					break;
-				case "2":
-					String WalletId;
-					System.out.println("Enter the WalletId: ");
-					WalletId=s.next();
-					boolean w1=Validations.walletlength(WalletId);
-					assertEquals(true, w1,"Length of WalletId should be 4");
-					break;
-				case "3":
-					break;
-				case "4":
-					flag=false;
-					break;
-				default:
-					System.out.println("Please enter correct choice.");
-			}
-		}
+					
 	}
+	@Test
+	public void validatewalletidlength()
+	{
+		String WalletId;
+		System.out.println("Enter the WalletId: ");
+		WalletId=s.next();
+		boolean w1=Validations.walletlength(WalletId);
+		assertEquals(true, w1,"Length of WalletId should be 4");
+	}
+	@Test
+	public void validateaccountNolength()
+	{
+		System.out.println("Enter the Account number: ");
+		String accountNo=s.next();
+		boolean actual=Validations.bankaccountlength(accountNo);
+		assertEquals(true,actual,"Length should be 11");
+	}
+	
 }

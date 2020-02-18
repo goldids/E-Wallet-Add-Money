@@ -1,6 +1,5 @@
 package sprint.service;
 
-import sprint.dao.BankDAO;
 
 public interface Validations {
 	public static boolean validateId(String data)
@@ -16,10 +15,10 @@ public interface Validations {
 		{
 				String temp="";
 			temp=temp+data.charAt(i);
-			if(temp.matches(codepattern))
-				continue;
-			else
+			if(!temp.matches(codepattern))
 				return false;
+			else
+				return true;
 		}
 		return true;
 		}
@@ -30,38 +29,37 @@ public interface Validations {
 	{
 		int length=4;
 		int walletIdsize=walletId.length();
-		if(length==walletIdsize)
-			return true;
-		return false;
+		boolean flag=true;
+		return (length==walletIdsize)?flag:!flag;
 	}
 	public static boolean bankaccountlength(String accountNo)
 	{
 		int length=11;
 		int accountNosize=accountNo.length();
-		if(length==accountNosize)
-			return true;
-		return false;
+		boolean flag=true;
+		return (length==accountNosize)?flag:!flag;
+			
 	}
 	public static boolean debitcardlength(String debitcard)
 	{
 		int length=16;
 		int debitcardsize=debitcard.length();
-		if(length==debitcardsize)
-			return true;
-		return false;
+		boolean flag=true;
+		return (length==debitcardsize)?flag:!flag;
+		
 	}
 	public static boolean phoneNolength(String phoneNo)
 	{
 		int length=10;
 		int phoneNolength=phoneNo.length();
-		if(length==phoneNolength)
-			return true;
-		return false;
+		boolean flag=true;
+		return (length==phoneNolength)?flag:!flag;
+
 	}
 	public static boolean amount(String amount)
 	{
-		if(amount.equals("0"))
-			return false;
-		return true;
+		boolean flag=true;
+		return amount.equals("0")?flag:!flag;
+			
 	}
 }
