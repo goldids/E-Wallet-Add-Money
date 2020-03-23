@@ -10,15 +10,13 @@ public interface Validations {
 		if(temp1.matches(codepattern))
 		{
 		codepattern = "[0-9]";
-		
+		boolean flag=false;
 		for(int i=1;i<data.length()-1;i++)
 		{
 				String temp="";
 			temp=temp+data.charAt(i);
-			if(!temp.matches(codepattern))
-				return false;
-			else
-				return true;
+			
+			return (!temp.matches(codepattern))?flag:!flag;
 		}
 		return true;
 		}

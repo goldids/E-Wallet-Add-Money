@@ -1,8 +1,8 @@
 package sprint.exceptions;
 
 public class CvvNotMatchException extends Exception{
-		public CvvNotMatchException()
+		public CvvNotMatchException(String message)
 		{
-			System.out.println("Wrong CVV! provide correct CVV!");
+			super(message);
 		}
 }

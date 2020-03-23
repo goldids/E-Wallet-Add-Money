@@ -10,50 +10,51 @@ import sprint.exceptions.DebitcardNotFoundException;
 import sprint.exceptions.InvalidAccountException;
 import sprint.exceptions.LowBalanceException;
 import sprint.exceptions.NegativeAmountException;
-import sprint.service.BankinfoService;
-import sprint.service.DebitcardinfoService;
+
 import sprint.service.Validations;
 import sprint.service.WalletinfoService;
 
-public class ClientDmmy {
+public class Client {
 
 	public static void main(String[] args)throws Exception {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		WalletinfoService walletService=new WalletinfoService();
-		BankinfoService bankService=new BankinfoService();
-		DebitcardinfoService debitcardService = new DebitcardinfoService();
+		
 		boolean flag=true;
-		while(flag)
+		boolean flag1=true;
+		System.out.println("====================================");
+		System.out.println("WELCOME TO THE E-WALLET!");
+		System.out.println("====================================\n");
+		while(flag1)
 		{
-			System.out.println("WELCOME TO THE E-WALLET!");
-			System.out.println("Enter your walletId: ");
-			try {
-				
+			
+
+			System.out.println("Enter your walletId: ");	
 			int walletId;
 			while(true)
 			{
 				try
 				{
 					String walletid = br.readLine();
-					boolean b1=Validations.validateId(walletid);
-					boolean b2=Validations.walletlength(walletid);
+					boolean validwalletid=Validations.validateId(walletid);
+					boolean validwalletidlength=Validations.walletlength(walletid);
 					
-					if(b1&&b2)
+					if(validwalletid&&validwalletidlength)
 					{
 						walletId=Integer.parseInt(walletid);
 						break;
 					}
 					else
 					{
-						if(!b1)
-						System.out.println("Wallet Id should contains only number.");
-						else if(!b2)
-							System.out.println("Invalid walletId");
+						if(!validwalletid)
+							System.out.println("Wallet Id should contains only number.Try Again");
+						else if(!validwalletidlength)
+							System.out.println("Invalid walletId.Try Again.");
 					}
 				}
-				catch(IOException e) {
-					System.out.println("Wallet Id should not be empty.Enter the walletid.");
+				catch(Exception e) {
+					System.out.println("Wallet Id should not be empty.\nEnter the walletid.");
 					
 				}
 			}
@@ -73,18 +74,18 @@ public class ClientDmmy {
 					amt=br.readLine();
 					boolean validateamount=Validations.amount(amt);
 					
-					if(validateamount)
+					if(!validateamount)
 					{
 						try
 						{
 							amount=Integer.parseInt(amt);
 								if(amount<0)
-									throw new NegativeAmountException();
+									throw new NegativeAmountException("Amount cannot be negative.");
 							break;
 						}
-						catch(Exception e)
+						catch(NegativeAmountException e)
 						{
-							System.out.println("Please enter valid amount again.");
+							System.out.println(e.getMessage());
 							
 						}
 					}
@@ -102,10 +103,14 @@ public class ClientDmmy {
 					
 				}
 				System.out.println("Choose the mode:");
+				do
+				{
+				//System.out.println("Choose the mode:");
 				System.out.println("Press 1 for BankAccount.");
 				System.out.println("press 2 for Debit Card");
 				System.out.println("Enter your choice: ");
 				String choice;
+				
 				choice=br.readLine();
 				switch(choice)
 				{
@@ -119,32 +124,47 @@ public class ClientDmmy {
 						bankaccountNo=br.readLine();
 						boolean validaccountNo=Validations.validateId(bankaccountNo);
 						boolean accountNolength=Validations.bankaccountlength(bankaccountNo);
+						
 						if(!(validaccountNo && accountNolength))
-								throw new InvalidAccountException(validaccountNo,accountNolength);
+						{
+								System.out.println("Invalid Account Number\n Please enter the account number again.");
+						}
 					
 						if(validaccountNo && accountNolength)
 						{
-							boolean verifyaccount=bankService.validBankaccount(bankaccountNo);
+							boolean verifyaccount=walletService.validBankaccount(bankaccountNo);
+							try
+							{
 								if(!verifyaccount)
 									throw new InvalidAccountException(validaccountNo,accountNolength);
+							}
+							catch(InvalidAccountException e)
+							{
+								System.out.println(e.getMessage());
+							}
 		
-								double bankamount=bankService.checkBankamount(bankaccountNo);
-								
+								double bankamount=walletService.checkBankamount(bankaccountNo);
+										try
+										{
 										if(bankamount<1000)
-											throw new LowBalanceException(bankamount);
+											throw new LowBalanceException("Low Balance!");
 										else if(amount>bankamount)
-											throw new LowBalanceException(bankamount);
+											throw new LowBalanceException("Insufficent Balance!");
+										}
+										catch(LowBalanceException e)
+										{
+											System.out.println(e.getMessage());
+											System.out.println("Choose Other Options");
+											break;
+										}
 										
-										bankService.updateBankamout(bankaccountNo, amount);
+										walletService.updateBankamout(bankaccountNo, amount);
 										walletService.updatewalletamount(walletId, amount);
 										System.out.println("Sucessfully Added Rs."+amount+" to your wallet.");
 										System.out.println("Updated wallet amount: "+walletService.getwalletamount(walletId));
-										System.out.println("Available Balance in your Bank Account: "+bankService.checkBankamount(bankaccountNo));
-										System.out.println("Do you want to continue (y/n)");
-										String con;
-										Scanner s=new Scanner(System.in);
-											con = s.next();
-										if(con.equals("n") || con.equals("N"))
+										System.out.println("Available Balance in your Bank Account: "+walletService.checkBankamount(bankaccountNo));
+										System.out.println("\n");
+									
 											flag=false;
 										break;
 							}
@@ -154,7 +174,7 @@ public class ClientDmmy {
 					
 						catch(Exception e)
 						{
-							System.out.println("Please Enter the account number");
+							System.out.println("Please Enter the account number again");
 						}
 					}
 					break;
@@ -172,10 +192,18 @@ public class ClientDmmy {
 							{
 								System.out.println("Enter your cvv Number");
 								cvv=br.readLine();
-								boolean cardandcvv=debitcardService.cardandcvv(debitcardNo, cvv);
+								boolean cardandcvv=walletService.cardandcvv(debitcardNo, cvv);
+								try
+								{
 								if(!cardandcvv)
-									throw new CvvNotMatchException();
+									throw new CvvNotMatchException("Wrong CVV! provide correct CVV!");
 								break;
+								}
+								catch(CvvNotMatchException e)
+								{
+									System.out.println(e.getMessage());
+									
+								}
 								
 							}
 							boolean validcardNo=Validations.validateId(debitcardNo);
@@ -183,34 +211,46 @@ public class ClientDmmy {
 								if(!validcardNo)
 									System.out.println("Card number should contains only integer.");
 							
-							if(validcardNo && cardNolength)
+						if(validcardNo && cardNolength)
 							{
-								boolean verifycard=debitcardService.validcard(debitcardNo);
+								boolean verifycard=walletService.validcard(debitcardNo);
+								try
+								{
 									if(!verifycard)
-										throw new DebitcardNotFoundException();
-
-									String cardbankaccountNo=debitcardService.getBankAccountNo(debitcardNo);
-									double bankamount=bankService.checkBankamount(cardbankaccountNo);
+										throw new DebitcardNotFoundException("Please enter valid card Number.");
+									
+								}
+								catch(DebitcardNotFoundException e)
+								{
+									System.out.println(e.getMessage());
+								}
+							
+									String cardbankaccountNo=walletService.getBankAccountNo(debitcardNo);
+									double bankamount=walletService.checkBankamount(cardbankaccountNo);
+									try {
 										if(bankamount<1000)
-											throw new LowBalanceException(bankamount);
+											throw new LowBalanceException("Low Balance!");
 										else if(amount>bankamount)
-											throw new LowBalanceException(bankamount);
-										bankService.updateBankamout(cardbankaccountNo, amount);
+											throw new LowBalanceException("Insufficent Balance");
+									}
+									catch(LowBalanceException e)
+									{
+										System.out.println(e.getMessage());
+										System.out.println("Choice Other Choices.");
+										break;
+									}
+										walletService.updateBankamout(cardbankaccountNo, amount);
 										walletService.updatewalletamount(walletId, amount);
 										System.out.println("Sucessfully Added Rs."+amount+" to your wallet.");
-										System.out.println("Updated wallet amount: "+walletService.getwalletamount(walletId));
-										System.out.println("updated bank amount: "+bankService.checkBankamount(cardbankaccountNo));
-										System.out.println("Do you want to continue (y/n)");
-										String con;
-										Scanner s=new Scanner(System.in);
-											con = s.next();
-										if(con.equals("n") || con.equals("N"))
+										System.out.println("Updated Wallet Amount: "+walletService.getwalletamount(walletId));
+										System.out.println("Updated Bank Infomation:\n");
+										System.out.println("Available Balance: "+walletService.checkBankamount(cardbankaccountNo));
 											flag=false;
 										break;
 											
-									
+							}
 								}
-															}
+							
 						catch(Exception e)
 						{
 							System.out.println("Please enter valid card number.");
@@ -221,14 +261,23 @@ public class ClientDmmy {
 						System.out.println("Please Enter valid choice!");
 				
 			}
-			
+				
+				}while(flag);
+				
+				System.out.println("Do you want to continue (y/n)");
+				System.out.println("Press 'y' to continue and any other key to end.");
+				String con;
+				Scanner s=new Scanner(System.in);
+					con = s.next();
+				if(con.equals("y") || con.equals("Y"))
+					flag1=true;
+				else
+				{
+					System.out.println("Thank You for using E-Wallet.");
+					flag1=false;
+				}
 		}
-	}//end first try block
-			catch(Exception e)
-			{
-				System.out.println("Enter valid walletId.");
-			}
-			
+
 			
 }//end while loop
 }//end main function

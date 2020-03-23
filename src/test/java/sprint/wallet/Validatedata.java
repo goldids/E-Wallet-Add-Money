@@ -13,7 +13,7 @@ public class Validatedata {
 	Scanner s=new Scanner(System.in);
 	
 	@Test
-	public void validateId()
+	public void validateIdtesting()
 	{
 		
 					String str;
@@ -25,7 +25,7 @@ public class Validatedata {
 					
 	}
 	@Test
-	public void validatewalletidlength()
+	public void validatewalletidlengthtesting()
 	{
 		String WalletId;
 		System.out.println("Enter the WalletId: ");
@@ -34,12 +34,20 @@ public class Validatedata {
 		assertEquals(true, w1,"Length of WalletId should be 4");
 	}
 	@Test
-	public void validateaccountNolength()
+	public void validateaccountNolengthtesting()
 	{
 		System.out.println("Enter the Account number: ");
 		String accountNo=s.next();
 		boolean actual=Validations.bankaccountlength(accountNo);
 		assertEquals(true,actual,"Length should be 11");
+	}
+	@Test
+	public void validatedebitcardlengthtesting()
+	{
+		System.out.println("Enter the debit card number: ");
+		String debitcardNo=s.next();
+		boolean actual=Validations.debitcardlength(debitcardNo);
+		assertEquals(true,actual,"Length should be 16");
 	}
 	
 }

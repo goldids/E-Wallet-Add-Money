@@ -1,9 +1,9 @@
 package sprint.exceptions;
 
 public class DebitcardNotFoundException extends Exception{
-	public DebitcardNotFoundException()
+	public DebitcardNotFoundException(String message)
 	{
-		System.out.println("Card number does not exists.");
+		super(message);
 	}
 
 }

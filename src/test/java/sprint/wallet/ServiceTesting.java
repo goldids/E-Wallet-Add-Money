@@ -22,7 +22,7 @@ public class ServiceTesting {
 	 
 	 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	 @Test
-	 public void checkBankamount()
+	 public void checkBankamounttesting()
 	 {
 		 System.out.println("Enter the account number: ");
 		 String accountNo;
@@ -37,7 +37,7 @@ public class ServiceTesting {
 		}
 	 }
 	 @Test
-	 public void validBankaccount()
+	 public void validBankaccounttesting()
 	 {
 		 System.out.println("2. Enter the account number: ");
 		 String accountNo;
@@ -51,17 +51,19 @@ public class ServiceTesting {
 			}
 	 }
 	 @Test
-	 public void validcard()
+	 public void validcardtesting()
 	 {
 		 System.out.println("2. Enter the Debit Card number: ");
 		 String debitcardNo;
 		  try
 		  {
 			debitcardNo=br.readLine();
-			System.out.println("Check");
+			if(!objcollectionclass.cardandBankdetails().containsKey(debitcardNo))
+				assertFalse(true,"InValid Card number");
 			boolean d=objdebitcardservice.validcard(debitcardNo);
 			System.out.println(d);
 			assertTrue(d);
+			System.out.println(d);
 			
 		}
 		  catch (IOException e)
@@ -71,7 +73,7 @@ public class ServiceTesting {
 		
 	 }
 	 @Test
-	 public void cardandcvv()
+	 public void cardandcvvtesting()
 	 {
 		 System.out.println("Enter the Debit Card number: ");
 		 String debitcardNo;
@@ -89,7 +91,7 @@ public class ServiceTesting {
 		 }
 	 }
 	 @Test
-	 public void getBankAccountNo()
+	 public void getBankAccountNotesting()
 	 {
 		 System.out.println("Enter the Debit Card number: ");
 		 try {
@@ -110,7 +112,7 @@ public class ServiceTesting {
 		 
 	 }
 	 @Test
-	 public void getwalletamount()
+	 public void getwalletamounttesting()
 	 {
 		 System.out.println("Enter the WalletId: ");
 		 try 
@@ -128,7 +130,7 @@ public class ServiceTesting {
 		 
 	 }
 	 @Test
-	 public void verifywalletId()
+	 public void verifywalletIdtesting()
 	 {
 		 System.out.println("Enter walletId: ");
 		 try
@@ -136,7 +138,7 @@ public class ServiceTesting {
 			 String walletid=br.readLine();
 				int wid=Integer.parseInt(walletid);
 			boolean actual = objwalletservice.verifywalletId(wid);
-			System.out.println(actual);
+			
 			assertEquals(true, actual,"InValid WalletId");
 		} 
 		 catch (IOException e)
